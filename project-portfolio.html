@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Projects</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #fafafa;
+            color: #1a1a1a;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        header {
+            margin-bottom: 80px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            color: #666;
+            font-weight: 400;
+        }
+
+        .projects-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .project-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .project-card:hover {
+            border-color: #999;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .project-card h3 {
+            font-size: 1.3em;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+            font-weight: 500;
+        }
+
+        .project-card p {
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        .project-detail {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 40px;
+        }
+
+        .back-btn {
+            background: white;
+            color: #1a1a1a;
+            border: 1px solid #e0e0e0;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95em;
+            margin-bottom: 32px;
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            border-color: #999;
+            background: #fafafa;
+        }
+
+        .download-btn {
+            background: #1a1a1a;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 32px;
+            transition: all 0.2s ease;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .download-btn:hover {
+            background: #333;
+        }
+
+        .project-detail h2 {
+            font-size: 2em;
+            margin-bottom: 16px;
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+
+        .project-detail .description {
+            font-size: 1em;
+            line-height: 1.7;
+            color: #666;
+            margin-bottom: 24px;
+        }
+
+        .project-detail .meta {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 24px;
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        #home-view {
+            display: block;
+        }
+
+        #detail-view {
+            display: none;
+        }
+
+        #detail-view.active {
+            display: block;
+        }
+
+        #home-view.hidden {
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 40px 16px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .project-detail {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="home-view">
+            <header>
+                <h1>Light</h1>
+                <p class="subtitle">Building tools and sharing projects</p>
+            </header>
+
+            <div class="projects-grid" id="projectsGrid"></div>
+        </div>
+
+        <div id="detail-view">
+            <div class="project-detail" id="projectDetail"></div>
+        </div>
+    </div>
+
+    <script>
+        const projects = [
+            {
+                id: 1,
+                title: "Project One",
+                shortDesc: "A simple one stop shop hub app built in HTML",
+                fullDesc: "A simple hub app I built to mostly collect all the things I use into one place really useless and really basic",
+                version: "v0.1",
+                size: "0.8 MB",
+                downloadUrl: "https://github.com/Light1yg/hubapp1/blob/main/hub.html"
+            },
+            
+        ];
+
+        function renderProjects() {
+            const grid = document.getElementById('projectsGrid');
+            grid.innerHTML = projects.map(project => `
+                <div class="project-card" onclick="showProject(${project.id})">
+                    <h3>${project.title}</h3>
+                    <p>${project.shortDesc}</p>
+                </div>
+            `).join('');
+        }
+
+        function showProject(id) {
+            const project = projects.find(p => p.id === id);
+            const detailView = document.getElementById('detail-view');
+            const homeView = document.getElementById('home-view');
+            const detailContainer = document.getElementById('projectDetail');
+
+            detailContainer.innerHTML = `
+                <button class="back-btn" onclick="showHome()">← Back</button>
+                <h2>${project.title}</h2>
+                <div class="meta">
+                    <span>Version ${project.version}</span>
+                    <span>${project.size}</span>
+                </div>
+                <div class="description">
+                    <p>${project.fullDesc}</p>
+                </div>
+                <a href="${project.downloadUrl}" class="download-btn" download>Download</a>
+            `;
+
+            homeView.classList.add('hidden');
+            detailView.classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        function showHome() {
+            const detailView = document.getElementById('detail-view');
+            const homeView = document.getElementById('home-view');
+            
+            detailView.classList.remove('active');
+            homeView.classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        renderProjects();
+    </script>
+</body>
+</html>
